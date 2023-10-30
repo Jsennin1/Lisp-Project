@@ -1,0 +1,430 @@
+
+問題１
+
+(caddr `(apple orange pear grapefruit))       ,   (car(cdr(cdr `(apple orange pear grapefruit))))     
+(caadr `((apple orange) (pear grapefruit)))	,	(car(car(cdr `((apple orange) (pear grapefruit)))))
+(car (caddar `(((apple) (orange) (pear) (grapefruit)))))  , (car (car(cdr(cdr(car `(((apple) (orange) (pear) (grapefruit))))))))
+(car (caaddr `(apple (orange) ((pear)) (((grapefruit))))))   , (car (car(car(cdr(cdr `(apple (orange) ((pear)) (((grapefruit)))))))))
+(caaddr `((((apple))) ((orange)) (pear) grapefruit))	, (car(car(cdr(cdr `((((apple))) ((orange)) (pear) grapefruit)))))
+(cadar `((((apple) orange) pear) grapefruit))   ,  (car(cdr(car `((((apple) orange) pear) grapefruit))))
+
+問題2
+
+(set 'tools (list 'hammer 'screwdriver))
+my guess : (hammer screwdriver)
+(cons 'pliers tools)
+my guess : (tools hammer screwdriver)
+tools
+my guess : (hammer screwdriver) 
+(set 'tools (cons 'pliers tools))
+my guess : (pliers hammer screwdriver) 
+tools
+my guess : (pliers hammer screwdriver) 
+(append '(saw wrench) tools)
+my guess : ((saw wrench) pliers hammer screwdriver) 
+tools
+my guess : (pliers hammer screwdriver) 
+(set 'tools (append '(saw wrench) tools))
+my guess : ((saw wrench) pliers hammer screwdriver) 
+tools 
+my guess : ((saw wrench) pliers hammer screwdriver )
+
+Result
+
+[15]> (set 'tools (list 'hammer 'screwdriver))
+(HAMMER SCREWDRIVER)
+[16]> (cons 'pliers tools)
+(PLIERS HAMMER SCREWDRIVER)
+[17]> tools
+(HAMMER SCREWDRIVER)
+[18]> (set 'tools (cons 'pliers tools))
+(PLIERS HAMMER SCREWDRIVER)
+[19]> tools
+(PLIERS HAMMER SCREWDRIVER)
+[20]> (append '(saw wrench) tools)
+(SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+[21]> tools
+(PLIERS HAMMER SCREWDRIVER)
+[22]> (set 'tools (append '(saw wrench) tools))
+(SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+[23]> tools
+(SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+
+問題3
+
+(length '(plato socrates aristotle))
+my guess :3
+(length '((plato) (socrates) (aristotle)))
+my guess :3
+(length '((plato socrates aristotle))) 
+my guess :1
+
+result
+(length '(plato socrates aristotle))
+3
+[2]> (length '((plato) (socrates) (aristotle)))
+3
+[3]> (length '((plato socrates aristotle)))
+1
+
+問題4
+
+(reverse '(plato socrates aristotle))
+my guess : (aristotle socrates plato)
+(reverse '((plato) (socrates) (aristotle)))
+my guess : ((aristotle) (socrates) (plato))
+(reverse '((plato socrates aristotle))) 
+my guess : ((plato socrates aristotle))
+
+result
+
+(reverse '(plato socrates aristotle))
+(ARISTOTLE SOCRATES PLATO)
+[8]> (reverse '((plato) (socrates) (aristotle)))
+((ARISTOTLE) (SOCRATES) (PLATO))
+[9]> (reverse '((plato socrates aristotle)))
+((PLATO SOCRATES ARISTOTLE))
+
+問題5
+
+(length '((car chevrolet) (drink coke) (cereal wheaties)))
+my guess : 3
+(reverse '((car chevrolet) (drink coke) (cereal wheaties)))
+my guess : ((cereal wheaties) (drink coke) (car chevrolet))
+(append '((car chevrolet) (drink coke)) (reverse '((car chevrolet) (drink coke))))
+my guess : ((drink coke) (car chevrolet) (car chevrolet) (drink coke))
+(subst 'out 'in '(the ball is in))
+my guess : (the ball is out)
+(subst 'in 'out '(the ball is in))
+my guess : (the ball is in)
+(last '(the ball is in)) 
+my guess : (in)
+
+result
+
+[1]> (length '((car chevrolet) (drink coke) (cereal wheaties)))
+3
+[2]> (reverse '((car chevrolet) (drink coke) (cereal wheaties)))
+((CEREAL WHEATIES) (DRINK COKE) (CAR CHEVROLET))
+[3]> (append '((car chevrolet) (drink coke)) (reverse '((car chevrolet) (drink coke))))
+((CAR CHEVROLET) (DRINK COKE) (DRINK COKE) (CAR CHEVROLET))
+[4]> (subst 'out 'in '(the ball is in))
+(THE BALL IS OUT)
+[5]> (subst 'in 'out '(the ball is in))
+(THE BALL IS IN)
+[6]> (last '(the ball is in))
+(IN)
+
+問題6
+
+[1]> (defun first1 (x)
+ (car x))
+FIRST1
+[2]>  (first1 `(apple orange pear grapefruit))
+APPLE
+----
+[1]> (defun rest1 (x)
+ (cdr x))
+REST1
+[2]> (rest1 `(apple orange pear grapefruit))
+(ORANGE PEAR GRAPEFRUIT)
+----
+[1]> (defun insert (x y)
+(cons x y))
+INSERT
+[2]> (insert 'x 'y)
+(X . Y)
+----
+[3]> (defun second1 (x)
+ (first1 (rest1 x)))
+SECOND1
+[4]> (second1 `(apple orange pear grapefruit))
+ORANGE
+
+------
+[7]> (defun third1 (x)
+ (first1 (rest1(rest1 x))))
+THIRD1
+[8]>  (third1 `(apple orange pear grapefruit))
+PEAR
+
+
+
+問題7
+
+[1] > (defun rotate-l(x)
+    (append(cdr x)  (list(car x))))
+    ROTATE-L
+[2] > (rotate-l `(a b c))
+    (B C A)
+
+
+問題8
+
+[1] > (defun palindrome(x)
+    (append x(reverse x)))
+    PALINDROME
+[2] > (palindrome `(d o g))
+    (D O G G O D)
+
+
+問題9
+
+[1] > (defun PALINDROMEP(x)
+    (equal x(reverse x)))
+    PALINDROMEP
+[2] > (PALINDROMEP `(D O G G O D))
+    T
+[3] > (PALINDROMEP `(D O G G O))
+    NIL
+
+
+問題10
+
+
+[1] > (defun CHECK-TEMPERATURE(x)
+    (cond((>= x 100) `RIDICULOUSLY-HOT)
+        ((<= x 0) `RIDICULOUSLY-COLD)
+        ((> x 0) `OK)
+
+            ))
+    CHECK-TEMPERATURE
+[2] > (CHECK-TEMPERATURE `100)
+        RIDICULOUSLY-HOT
+[3] > (CHECK-TEMPERATURE `5)
+        OK
+[4] > (CHECK-TEMPERATURE `-5)
+        RIDICULOUSLY-COLD
+
+
+問題11
+
+
+[1] > (defun al-member(x y)
+    (cond((or (null y) (atom y)) nil)
+        ((member x y) t)
+        (t(or (al-member x(cdr y)) (al-member x(car y))))
+        ))
+    AL-MEMBER
+[2] > (al - member `d `(a(b c(d))))
+    T
+[3] > (al - member `f `(a(b c(d))))
+    NIL
+
+
+問題12
+[1] > (defun my-reverse(x)
+    (reverse x))
+    MY-REVERSE
+[2] > (my-reverse `(a(b c) (d(e f))))
+    ((D(E F)) (B C) A)
+
+
+    
+
+
+[1] > (defun al-reverse(x)
+    (cond((or (null x) (atom x)) x)
+        (t(append(al-reverse(cdr x)) (list(al-reverse(car x)))))
+        ))
+    AL - REVERSE
+[2] > (al-reverse `(a(b c) (d(e f))))
+    (((F E) D) (C B) A)
+
+
+    問題13
+
+    [1] > (defun max1(x)
+        (cond((null(cdr x))  (car x))
+            ((>= (car x) (cadr x)) (max1(append(list(car x)) (cddr x))))
+            ((< (car x) (cadr x)) (max1(append(list(cadr x)) (cddr x))))
+            ))
+    MAX1
+    [2] > (max1 `(1 3 9 4))
+    9
+    [3] > (defun al-max(x)
+        (cond((null x)  most-negative-fixnum)
+            ((atom x) x)
+            (t(max1(append(list(al-max(car x))) (list(al-max(cdr x))))))
+            ))
+    AL-MAX
+    [4] > (al-max `((1 3) ((9) 4)))
+    9
+
+    問題14
+
+    [1] > (defun my-union(x y)
+            (cond((null(car y)) x)
+                ((member(car y) x) (my-union  x (cdr y)))
+                ((my-union (append x (list(car y))) (cdr y)))
+                ))
+        MY-UNION
+
+    [2] > (my-union `(a b c) `(b c d))
+        (A B C D)
+
+    問題15
+
+        [1] > (defun my-intersection(x y)
+            (cond((null(car y)) nil)
+                ((not(member(car y) x)) (my-intersection  x(cdr y)))
+                (t(append(list(car y)) (my-intersection x(cdr y))))
+                ))
+        MY-INTERSECTION
+        [2] > (my-intersection `(a b c) `(b c d))
+        (B C)
+
+    問題16
+
+ 
+    [1] > (defun my-intersection(x y)
+        (cond((null(car y)) nil)
+            ((not(member(car y) x)) (my-intersection  x(cdr y)))
+            (t(append(list(car y)) (my-intersection x(cdr y))))
+            ))
+    MY-INTERSECTION
+
+    [3] > (defun intersectp(x y)
+        (cond((null(my-intersection x y)) nil)
+            (t)
+            ))
+    INTERSECTP
+    [4] > (intersectp `(a b c) `(b c d))
+    T
+    [5] > (intersectp `(a b c) `(d e f))
+    NIL
+
+    問題17
+
+    [1] > (defun my-intersection(x y)
+        (cond((null(car y)) nil)
+            ((not(member(car y) x)) (my-intersection  x(cdr y)))
+            (t(append(list(car y)) (my-intersection x(cdr y))))
+            ))
+    MY-INTERSECTION
+
+    [6] > (defun samesetp(x y)
+        (= (length(my-intersection x y)) (length x))
+        )
+    SAMESETP
+
+    [8] > (samesetp `(a b c) `(b c a))
+    T
+    [9] > (samesetp `(a b c) `(a b d))
+    NIL
+
+    問題18
+
+        [1] > (defun max1(x)
+            (cond((null(cdr x))  (car x))
+                ((>= (car x) (cadr x)) (max1(append(list(car x)) (cddr x))))
+                ((< (car x) (cadr x)) (max1(append(list(cadr x)) (cddr x))))
+                ))
+        MAX1
+        [2] > (defun min1(x)
+            (cond((null(cdr x))  (car x))
+                ((<= (car x) (cadr x)) (min1(append(list(car x)) (cddr x))))
+                ((> (car x) (cadr x)) (min1(append(list(cadr x)) (cddr x))))
+                ))
+        MIN1
+        [3] > (defun allmax(x)
+            (cond((or (null x)(atom x))  x)
+                (t(max1(mapcar `allmax x)))
+                ))
+        ALLMAX
+        [4] > (defun allmin(x)
+            (cond((or (null x)(atom x))  x)
+                (t(min1(mapcar `allmin x)))
+                ))
+        ALLMIN
+        [5] > (allmax `((2 3) ((9) 4)))
+        9
+        [6] > (allmin `((2 3) ((9) 4)))
+        2
+        [7] > (defun dynamic-range(x)
+            (/ (allmin x) (allmax x)))
+        DYNAMIC - RANGE
+        [8] > (dynamic-range `((2 3) ((9) 4)))
+        2 / 9
+
+        問題19
+
+        [1] > (defun factorial(n)
+            (prog(result exponent)
+                (setq result 1)
+                (setq exponent n)
+                loop
+                (cond((zerop exponent) (return result)))
+                (setq result(*exponent result))
+                (setq exponent(-exponent 1))
+                (go loop)))
+        FACTORIAL
+        [2] > (factorial 5)
+        120
+        [3] > (factorial 20)
+        2432902008176640000
+        [4] > (factorial 0)
+        1
+        [5] > (factorial 1)
+        1
+
+
+        問題21
+
+     
+        [1] > (defun p(x)
+            (cond((null x) nil)
+                ((atom(car x)) (cons(car x) (p(cdr x))))
+                (t(append(p(car x)) (p(cdr x))))
+                ))
+        P
+        [2] > (setq s `(a(b(c d) e) (f(g(h i) j) k) l))
+        (A(B(C D) E) (F(G(H I) J) K) L)
+        [3] > (p(list `(THE ATOMS IN S ARE) s))
+        (THE ATOMS IN S ARE A B C D E F G H I J K L)
+        [4] > (defun pc(x y)
+            (cond((null x) nil)
+                (t(p y))
+                ))
+        PC
+        [5] > (setq n `robbie)
+            ROBBIE
+        [6] > (pc(not (numberp n)) (list `WARNING n `(IS NOT A NUMBER)))
+        (WARNING ROBBIE IS NOT A NUMBER)
+        [7] > (pc(not (numberp s)) (list `WARNING s `(IS NOT A NUMBER)))
+        (WARNING A B C D E F G H I J K L IS NOT A NUMBER)
+        [8] > (pc(not (numberp 2)) (list `WARNING 2 `(IS NOT A NUMBER)))
+        NIL
+        [9] > (defun rq(s)
+            (print(p s))
+            (read)
+            )
+        RQ
+        [10] > (rq `(PLEASE SUPPLY A VALUE FOR PI))
+        (PLEASE SUPPLY A VALUE FOR PI)  3.14159
+        3.14159
+
+
+        問題22
+
+
+            
+        [1] > (defun fetch(x y)
+                (cond((or (or (null x)(null y)) (null(assoc x y)))  `?)
+                    (t(cadr(assoc x y)))
+                    ))
+            FETCH
+        [2] > (setq chart `((temperature 100) (pressure(120 60)) (pulse 72)))
+            ((TEMPERATURE 100) (PRESSURE(120 60)) (PULSE 72))
+        [3] > (fetch `temperature chart)
+            100
+        [4] > (fetch `complains chart)
+            ?
+        [5] > (fetch `complains)
+
+
+            
+
+
+
+         
